@@ -81,11 +81,15 @@ const CreateBiographySchemea = Yup.object().shape({
 
 interface IFormCreateBiography extends Yup.InferType<typeof CreateBiographySchemea> {}
 
-const CreateBiographyPage = (
-    {bio , editMode = false}: 
+interface CreateBiographyPageProps{
+    bio?: Biography
+    editMode?: boolean
+}
 
-    {bio?: Biography, editMode?: boolean}
-) => {
+const CreateBiographyPage: React.FC<CreateBiographyPageProps> = ({
+    bio,
+    editMode = false
+}) => {
     const tabs = ["Biografía", "Fotos", "Videos", "Mensajes"];
     const { user } = useAuthStore();
     const router = useRouter();
