@@ -8,6 +8,7 @@ import { CircularProgress } from "@mui/material";
 import { useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import CreateBiographyPage from "../../create/page";
+import CreateBiography from "@/components/form/create-biography";
 
 const EditBiographyPage = ({params}: {params: {bioId: string}}) => {
     const [loading, startLoading] = useTransition()
@@ -35,7 +36,7 @@ const EditBiographyPage = ({params}: {params: {bioId: string}}) => {
             ): (
                 <>
                     {biography ? (
-                        <CreateBiographyPage editMode bio={biography}/>
+                        <CreateBiography editMode bio={biography}/>
                     ): (
                         <div>No existe biografia</div>
                     )}
