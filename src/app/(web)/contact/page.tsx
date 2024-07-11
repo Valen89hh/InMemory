@@ -44,7 +44,7 @@ const ContactPage = () => {
             <main className="w-full space-y-6">
                 <div className="flex flex-col justify-center items-center">
                     <h2 className="text-primary text-center text-[2.5rem] xs:text-[3rem] uppercase">Cont&aacute;nos</h2>
-                    <h3 className="text-black text-center text-[1.7rem]">Estamos aq&iacute; para ayudarte</h3>
+                    <h3 className="text-black text-center text-[1.7rem]">Estamos aqu&iacute; para ayudarte</h3>
                 </div>
                 <Card className="flex p-6 gap-4 flex-col md:flex-row md:justify-between">
                     <Image

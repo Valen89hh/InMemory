@@ -48,7 +48,7 @@ const Footer = () => {
                         <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://ohafd"}>
                             <Whatsapp width={20} height={20}/>
                         </Link>
-                        <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://ohafd"}>
+                        <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://www.facebook.com/share/rNUXp3qYhKKCPrXZ/?mibextid=qi2Omg"}>
                             <Facebook width={20} height={20}/>
                         </Link>
                         <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://ohafd"}>
