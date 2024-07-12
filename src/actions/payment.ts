@@ -20,7 +20,7 @@ export const buyBiography = async(title: string, bioId: string, userId: string, 
                         id: "Biography",
                         title: title,
                         quantity: 1,
-                        unit_price: 20
+                        unit_price: 8
                     }
                 ],
                 metadata: {
