@@ -21,6 +21,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
+
 
 const BiographiesPage = () => {
     const {user, completeAdress} = useAuthStore()
@@ -32,8 +34,12 @@ const BiographiesPage = () => {
     useEffect(()=>{
         if(user){
             getBiographies()
+            initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!)
+
         }
     }, [])
+
+  
 
     const searchBiographies = useCallback((search: string)=>{
         if(user){
@@ -155,15 +161,23 @@ const CardBiografia = ({
     userId: string
 }) => {
     const {openModelAddress} = useModalAddress()
+    const [preferenceId, setPreferenceId] = useState("")
+    const [loadingIdPreference, startIdPreference] = useTransition()
 
-
-    const handleBuy = useCallback(()=>{
-        if(completeAdress){
+    useEffect(()=>{
+        startIdPreference(async()=>{
             const baseUrl = `${window.location.protocol}//${window.location.host}`
-            buyBiography(biography.name, biography.id, userId,{
+            const preferenceId = await buyBiography(biography.name, biography.id, userId,{
                 success: baseUrl+"/api/payment/success",
                 failure: baseUrl+"/api/payment/failure"
             })
+            if(preferenceId) setPreferenceId(preferenceId)
+        })
+    }, [])
+
+    const handleBuy = useCallback(async()=>{
+        if(completeAdress && preferenceId){
+            
         }else{
             openModelAddress()
         }
@@ -208,12 +222,24 @@ const CardBiografia = ({
                 <div className="flex flex-col justify-start">
                     <h3 className="text-xl text-primary uppercase">{biography.name}</h3>
                     <span className="text-sm text-gray-dark">{formatDataToString(biography.dateOfBirth)} - {formatDataToString(biography.dateOfDeath)}</span>
-                    {biography.statusPayment === "" ? (
-                        <ButtonPrimary onClick={handleBuy} className="w-fit flex items-center hover:shadow-lg transition-all duration-300 justify-center gap-2 text-sm mt-2 px-2 py-1">
-                            <PayIcon width={16} height={16}/> Buy Qr
-                        </ButtonPrimary>
+                    
+                    {loadingIdPreference ? (
+                        <CircularProgress color="primary"/>
                     ): (
-                        <span  className="text-center w-fit text-primary text-sm">{biography.statusPayment}</span>
+                        <>
+                            {biography.statusPayment === "" ? (
+                                <div>
+                                    {preferenceId ? (
+                                        <Wallet initialization={{ preferenceId: preferenceId }}/>
+                                    ): (
+                                        <span>Vuelve a intentar el pago</span>
+                                    )}
+                                </div>
+                            
+                            ): (
+                                <span  className="text-center w-fit text-primary text-sm">{biography.statusPayment}</span>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className="flex gap-2 items-center py-1 xs:hidden">

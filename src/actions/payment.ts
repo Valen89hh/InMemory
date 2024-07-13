@@ -34,5 +34,6 @@ export const buyBiography = async(title: string, bioId: string, userId: string, 
                 }
             }
         })
-    redirect(preference.sandbox_init_point!)
+     
+    return preference.id
 } 
