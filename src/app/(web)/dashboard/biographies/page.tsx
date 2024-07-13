@@ -34,8 +34,14 @@ const BiographiesPage = () => {
     useEffect(()=>{
         if(user){
             getBiographies()
-            initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!)
-
+            const key = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY
+            if(key){
+                initMercadoPago(key)
+                console.log("La clave existe", key)
+            }
+            else{
+                console.log("La clave no existe")
+            }
         }
     }, [])
 
