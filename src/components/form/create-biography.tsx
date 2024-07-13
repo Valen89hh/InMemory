@@ -282,7 +282,7 @@ const CreateBiography: React.FC<CreateBiographyProps> = ({
                         videos: videosUrls,
                         messages: mensajes,
                         id: bio.id,
-                        statusPayment: ""
+                        statusPayment: bio.statusPayment
                     });
 
                     console.log(res);

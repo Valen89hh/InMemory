@@ -22,10 +22,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
+import { useMethodosPayment } from "@/lib/storage/methodos-payment-storage";
+import ButtonPayment from "@/components/buttons/button-payment";
 
 
 const BiographiesPage = () => {
     const {user, completeAdress} = useAuthStore()
+    const {stateModalPayment, closeModelPayment} = useMethodosPayment()
     const {closeModelAddress, stateModalAddress} = useModalAddress()
     const [loading, startLoading] = useTransition()
     const [biographies, setBiographies] = useState<Biography[]>([])
@@ -37,10 +40,6 @@ const BiographiesPage = () => {
             const key = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY
             if(key){
                 initMercadoPago(key)
-                console.log("La clave existe", key)
-            }
-            else{
-                console.log("La clave no existe")
             }
         }
     }, [])
@@ -67,7 +66,6 @@ const BiographiesPage = () => {
             setStateSearch(false)
             startLoading(async()=>{
                 const res = await getBiographiesByUser(user.uid)
-                console.log(res)
                 if(res.biographies){
                     setBiographies(res.biographies)
                     setStateInitLoad(res.biographies.length === 0)
@@ -133,6 +131,13 @@ const BiographiesPage = () => {
                     <Close onClick={closeModelAddress} color="#003F5F" width={18} height={18} className="absolute cursor-pointer top-3 right-4"/>
                 </Card>
             </div>
+            <div className={`${!stateModalPayment && "hidden"} bg-[#00000060] flex justify-center items-center fixed inset-0 z-[20] h-screen w-screen`}>
+                <Card className="w-fit md:w-1/2 relative">
+                    <h3 className="text-primary text-center text-xl">Metodos de Pago</h3>
+                    <ButtonPayment/>
+                    <Close onClick={closeModelPayment} color="#003F5F" width={18} height={18} className="absolute cursor-pointer top-3 right-4"/>
+                </Card>
+            </div>
         </Card>
     );
 }
@@ -167,24 +172,19 @@ const CardBiografia = ({
     userId: string
 }) => {
     const {openModelAddress} = useModalAddress()
-    const [preferenceId, setPreferenceId] = useState("")
-    const [loadingIdPreference, startIdPreference] = useTransition()
+    const {openModelPayment, setBioPay} = useMethodosPayment()
 
-    useEffect(()=>{
-        startIdPreference(async()=>{
-            const baseUrl = `${window.location.protocol}//${window.location.host}`
-            const preferenceId = await buyBiography(biography.name, biography.id, userId,{
-                success: baseUrl+"/api/payment/success",
-                failure: baseUrl+"/api/payment/failure"
-            })
-            if(preferenceId) setPreferenceId(preferenceId)
-        })
-    }, [])
+
 
     const handleBuy = useCallback(async()=>{
-        if(completeAdress && preferenceId){
-            
-        }else{
+        if(completeAdress){
+            setBioPay({
+                name: biography.name,
+                bioId: biography.id,
+                userId: biography.userId
+            })
+            openModelPayment()
+        } else {
             openModelAddress()
         }
     }, [])
@@ -193,59 +193,45 @@ const CardBiografia = ({
         <article>
             <div className="w-full relative">
                 <img
-                    alt="imgane"
+                    alt="imagen"
                     src={biography.photoPerson}
                     width={4000}
                     height={4000}
                     className="w-full h-[15rem] object-cover"
                 />
 
-                <div className="absolute inset-0 flex justify-center items-center gap-4 group bg-transparent transition-all duration-300  xs:hover:bg-[#00000069]">
+                <div className="absolute inset-0 flex justify-center items-center gap-4 group bg-transparent transition-all duration-300 xs:hover:bg-[#00000069]">
                     <Link href={"/preview/"+biography.id}>
-                        <button title="Previsualizar" className=" transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
+                        <button title="Previsualizar" className="transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
                             <PreviewIcon color="#003F5F"/>
                         </button>
                     </Link>
 
                     <Link href={"/dashboard/biographies/edit/"+biography.id}>
-                        <button title="Editar" className=" transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
+                        <button title="Editar" className="transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
                             <EditIcon color="#003F5F"/>
                         </button>
                     </Link>
 
                     {biography.statusPayment === "pagado" && (
-
                         <Link href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`BIOGRAFÍA - ${biography.name.toUpperCase()}`)}%20${encodeURIComponent(`${window.location.protocol}//${window.location.host}/biography/${biography.id}`)}`} target="_blank" rel="noopener noreferrer">
-                            <button title="Compartir" className=" transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
+                            <button title="Compartir" className="transition-all duration-300 opacity-0 hidden xs:group-hover:opacity-100 bg-white cursor-pointer h-[4rem] w-[4rem] xs:group-hover:inline-flex justify-center items-center rounded-full">
                                 <ShareIcon color="#003F5F"/>
                             </button>
                         </Link>
                     )}
-
                 </div>
             </div>
             <div className="flex justify-between items-start mt-2 gap-4">
                 <div className="flex flex-col justify-start">
                     <h3 className="text-xl text-primary uppercase">{biography.name}</h3>
                     <span className="text-sm text-gray-dark">{formatDataToString(biography.dateOfBirth)} - {formatDataToString(biography.dateOfDeath)}</span>
-                    
-                    {loadingIdPreference ? (
-                        <CircularProgress color="primary"/>
-                    ): (
-                        <>
-                            {biography.statusPayment === "" ? (
-                                <div>
-                                    {preferenceId ? (
-                                        <Wallet initialization={{ preferenceId: preferenceId }}/>
-                                    ): (
-                                        <span>Vuelve a intentar el pago</span>
-                                    )}
-                                </div>
-                            
-                            ): (
-                                <span  className="text-center w-fit text-primary text-sm">{biography.statusPayment}</span>
-                            )}
-                        </>
+                    {biography.statusPayment === "" ? (
+                        <ButtonPrimary onClick={handleBuy} className="flex mt-2 justify-center items-center gap-2 w-fit">
+                            Buy Qr <PayIcon width={18} height={18}/>
+                        </ButtonPrimary>
+                    ) : (
+                        <span className="text-center w-fit text-primary text-sm">{biography.statusPayment}</span>
                     )}
                 </div>
                 <div className="flex gap-2 items-center py-1 xs:hidden">
@@ -257,7 +243,6 @@ const CardBiografia = ({
                         <EditIcon width={18} height={18} color="#003F5F"/>
                     </Link>
                     {biography.statusPayment === "pagado" && (
-
                         <Link href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`BIOGRAFÍA - ${biography.name.toUpperCase()}`)}%20${encodeURIComponent(`${window.location.protocol}//${window.location.host}/biography/${biography.id}`)}`} target="_blank" rel="noopener noreferrer">
                             <ShareIcon width={18} height={18} color="#003F5F"/>
                         </Link>
@@ -265,7 +250,8 @@ const CardBiografia = ({
                 </div>
             </div>
         </article>
-     );
+    );
 }
+
  
 
