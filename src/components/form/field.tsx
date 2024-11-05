@@ -1,25 +1,45 @@
-import React, { InputHTMLAttributes } from "react";
+"use client"
+
+import React, { InputHTMLAttributes, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    classNameContainer?: string
+
+
+interface FieldProps extends InputHTMLAttributes<HTMLInputElement>{
+  error?: string | null,
+  label?: string
+  classNameContainer?: string
 }
 
-const Field = React.forwardRef<HTMLInputElement, FieldProps>(
-  ({ className,classNameContainer, error, ...props }, ref) => {
-    return (
-      <div className={classNameContainer}>
-        <input
-          ref={ref}
-          className={twMerge("px-4 py-3 w-full text-black bg-background rounded-md", className)}
-          {...props}
-        />
-        {error && <span className="text-red-500 text-sm">{error}</span>}
-      </div>
-    );
-  }
-);
+const Field: React.FC<FieldProps> = ({
+  className,
+  classNameContainer,
+  error,
+  label,
+  ...props
+}) => {
+  const [isFocus, setIsFocus] = useState(false)
+  return (
+    <div className="w-full">
+        {label && (
+            <label className={`font-medium ${error ? "text-red-500" : "text-primary"} text-lg`} htmlFor={props.id}>
+                {label}
+            </label>
+        )}
+        <div className={twMerge(`border-solid transition-all ${label && "mt-1"} bg-background px-4 py-2 rounded-ms border-2 space-y-1
+            ${error ? "border-red-500" : isFocus ? "border-primary" : "border-slate-e"}`, classNameContainer)}>
+            <input 
+                className={twMerge("outline-none bg-transparent w-full border-none text-black", className)} 
+                {...props} 
+                onFocus={()=>setIsFocus(true)}
+                onBlur={()=>setIsFocus(false)}
+            />
+        </div>
+        {error && (<span className="text-red-500 text-sm" >{error}</span>)}
+    </div>
+  );
+}
+
 
 Field.displayName = "Field";
 

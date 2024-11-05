@@ -1,3 +1,5 @@
+"use client"
+
 import Container from "@/components/containers/container";
 import Logo from "@/components/logo";
 import Link from "next/link";
@@ -5,16 +7,22 @@ import ButtonSecondary from "@/components/buttons/button-secondary";
 import Whatsapp from "@/components/icons/whatsapp";
 import Facebook from "@/components/icons/facebook";
 import Instagram from "@/components/icons/instagram";
+import { usePathname } from "next/navigation";
+import { ROUTES_NOT_LAYOUT } from "@/lib/routes/layout";
 
 const Footer = () => {
+    const pathName = usePathname()
+
+    if(ROUTES_NOT_LAYOUT.some(route=>pathName.startsWith(route))) return null
+
     return ( 
         <footer className="bg-primary">
             <Container>
                 <div className="flex flex-col sm:flex-row justify-center items-center sm:items-start gap-[2rem] sm:justify-between  py-[4rem]">
                     <div className="text-white text-center sm:text-start">
                         <Logo color="#fff"/>
-                        <h3>+51 950 146 898</h3>
-                        <h3>info@inmemory.com</h3>
+                        <h3>+51 993 672 965</h3>
+                        <h3>contacto@inmemory.pe</h3>
                     </div>
                     <div className="text-white space-y-4 text-center md:text-start">
                         <h4 className="underline text-lg">Links</h4>
@@ -56,7 +64,7 @@ const Footer = () => {
                         </Link>
                     </div>
 
-                    <p className="text-white text-sm">© 2024 InMemory. All rights reserved.</p>
+                    <p className="text-white text-sm">© {new Date().getFullYear()} InMemory. All rights reserved.</p>
                 </div>
             </Container>
         </footer>

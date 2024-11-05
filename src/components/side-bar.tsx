@@ -11,23 +11,17 @@ import ContactIcon from "@/components/icons/contact-icon";
 import ButtonOutline from "@/components/buttons/button-outline";
 import ButtonPrimary from "@/components/buttons/button-primary";
 import { useSideBarStore } from "@/lib/storage/side-bar-storage";
-import { useAuthStore } from "@/lib/storage/auth-storage";
+import { useAuthStore, useProfileState } from "@/lib/storage/auth-storage";
 import Image from "next/image";
-import AccountIcon from "./icons/account-icon";
-import LogoutIcon from "./icons/logout-icon";
+import CardAnimation from "./animations/card-animation";
+import { LogOut, Newspaper, NotebookText, Settings, ShoppingBasket } from "lucide-react";
+import BadgeAlertOrders from "@/features/badge-alert/components/badge-alert-orders";
+import { signOut } from "@/features/auth/actions";
 
 const SideBar = () => {
   const { closeSideBar, stateSideBar } = useSideBarStore((state) => state);
-  const { user, logOut } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const handleLogout = ()=>{
-        try{
-            logOut()
-        }catch(err){
-            console.log(err)
-        }
-    }
+  const {profile, loadingProfile} = useProfileState()
 
   const backgroundVariants = {
     hidden: { opacity: 0 },
@@ -116,15 +110,12 @@ const SideBar = () => {
                     Contact
                   </Link>
                 </li>
-                {!user ? (
-                  <li className="flex gap-2 flex-col xs:flex-row">
-                    <Link href="/login">
-                      <ButtonOutline className="py-1 hover:shadow-md transition-all">
-                        Empezar
-                      </ButtonOutline>
-                    </Link>
+                {loadingProfile ? (
+                  <li className="flex gap-2 items-center">
+                    <CardAnimation className="h-5 w-5 rounded-full"/>
+                    <CardAnimation className="h-2 w-20"/>
                   </li>
-                ) : (
+                ) : profile ? (
                   <li >
                     <div
                       className="flex cursor-pointer items-center gap-2"
@@ -140,13 +131,13 @@ const SideBar = () => {
                       </motion.span>
 
                       <Image
-                        src={user.photoURL!!}
-                        alt=""
+                        src={profile.avatar_url ?? "/icons/user-none.svg"}
+                        alt={profile.first_name}
                         width={50}
                         height={50}
                         className="object-cover rounded-full h-[2rem] w-[2rem]"
                       />
-                      <h4>{user.displayName}</h4>
+                      <h4>{profile.first_name + (profile.last_name ?? "")}</h4>
                     </div>
 
                     <div className=" overflow-hidden mt-1">
@@ -160,38 +151,59 @@ const SideBar = () => {
                             variants={menuVariants}
                             transition={{ duration: 0.3 }}
                             >
-                            <li>
-                                <Link
-                                onClick={closeSideBar}
-                                className="flex hover:underline gap-2 items-center"
-                                href="/dashboard/biographies"
-                                >
-                                <AccountIcon
-                                    width={20}
-                                    height={20}
-                                    color="#003F5F"
-                                />
-                                My account
-                                </Link>
-                            </li>
-                            <li>
-                                <button
-                                onClick={handleLogout}
-                                className="flex hover:underline gap-2 items-center"
-                                >
-                                <LogoutIcon
-                                    width={18}
-                                    height={18}
-                                    color="#003F5F"
-                                />
-                                Logout
-                                </button>
-                            </li>
+                              <li onClick={closeSideBar}>
+                                  <Link className="flex items-center gap-2 hover:underline" href={"/dashboard/biographies"}>
+                                      <Newspaper className="text-ash-gray" size={20}/>
+                                      Mis Biografías
+                                  </Link>
+                              </li>
+                              <li onClick={closeSideBar}>
+                                  <Link className="flex items-center justify-between hover:underline" href={"/dashboard/orders"}>
+                                      <div className="flex items-center gap-2">
+                                          <ShoppingBasket className="text-ash-gray" size={20}/>
+                                          Órdenes
+                                      </div>
+                                      <BadgeAlertOrders/>
+                                  </Link>
+                              </li>
+                              <li onClick={closeSideBar}>
+                                  <Link className="flex items-center gap-2 hover:underline" href={"/dashboard/biographies/create"}>
+                                      <NotebookText className="text-ash-gray" size={20}/>
+                                      Crear Biografía
+                                  </Link>
+                              </li>
+                              <li onClick={closeSideBar}>
+                                  <Link className="flex items-center gap-2 hover:underline" href={"/dashboard/settings"}>
+                                      <Settings className="text-ash-gray" size={20}/>
+                                      Configuraci&oacute;n
+                                  </Link>
+                              </li>
+                              <li onClick={async()=>{
+                                  await signOut()
+                                  closeSideBar()
+                              }} className="flex cursor-pointer items-center gap-2 hover:underline"
+                              >
+                                  <LogOut className="text-ash-gray" size={20}/>
+                                  Logout
+                              </li>
                             </motion.ul>
                         )}
                         </AnimatePresence>
                     </div>
 
+                  </li>
+                ): (
+                  <li className="space-x-2 ml-6">
+                      <Link href={"/login"}>
+                          <ButtonOutline className="py-1" >
+                              Iniciar Sesión
+                          </ButtonOutline>
+                      </Link>
+                      <Link href={"/register"}>
+                          <ButtonOutline className="py-1" >
+                              Registrarse
+                          </ButtonOutline>
+                      </Link>
                   </li>
                 )}
               </ul>

@@ -1,25 +1,8 @@
-"use client"
+import PreviewBiography from "@/features/view-biography/components/preview-biography"
 
-import BiographyView from "@/components/biography-view"
-import { useAuthStore } from "@/lib/storage/auth-storage"
-
-const PreviewBiographyPage = ({params}: {params: {bioId: string}}) => {
-    const {user, loading} = useAuthStore()
-    //const [loading, setLoading] = useState(true)
-
-
-    if(loading){
-        return <div className="h-screen w-screen flex items-center justify-center">
-        Loading...
-    </div>
-    }
-
-
-    if(!user) return <div className="h-screen w-screen  flex items-center justify-center">
-        Pagina protegida
-    </div>
+const PreviewBiographyPage = async({params}: {params: {bioId: string}}) => {
     
-    return <BiographyView bioId={params.bioId}/>
+    return <PreviewBiography bioId={params.bioId}/>
 }
  
 export default PreviewBiographyPage;

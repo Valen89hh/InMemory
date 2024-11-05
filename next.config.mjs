@@ -10,12 +10,12 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "firebasestorage.googleapis.com",
+                hostname: "wtxrahgrpiwnypsezxof.supabase.co",
                 port: "",
                 
             },
         ]
-    }
+    },
 };
 
 export default nextConfig;
