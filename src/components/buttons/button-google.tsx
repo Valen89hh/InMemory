@@ -13,12 +13,12 @@ const ButtonGoogle: React.FC<ButtonGoogleProps> = ({
     ...props
 }) => {
     return ( 
-        <button className={twMerge("bg-gray-light text-sm text-gray-dark py-2 px-6 flex gap-2 justify-center items-center rounded-md",className)} {...props}>
+        <button className={twMerge("bg-background transition-all hover:bg-gray-light border-gray-light border-2 text-sm text-gray-dark py-2 px-6 flex gap-2 justify-center items-center rounded-md",className)} {...props}>
             <Image
                 alt="google"
-                src={"/icons/google.png"}
-                width={30}
-                height={30}
+                src={"/icons/google.svg"}
+                width={25}
+                height={25}
             />
 
             {children}

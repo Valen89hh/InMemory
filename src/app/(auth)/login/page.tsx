@@ -1,31 +1,18 @@
-
-import CardAuth from "@/components/auth/card-auth";
-import Image from "next/image";
 import type { Metadata } from "next";
+import LoginForm from "@/features/auth/components/login-form";
+import SideImageAuth from "@/features/auth/components/side-image-auth";
 
 
 export const metadata: Metadata = {
-    title: "InMemory - Login",
-    description: "Login para InMemory",
+    title: "InMemory | Login",
+    description: "Iniciar en InMemory y crear una cuenta",
 };
-
 
 const LoginPage = () => {
     return ( 
-        <main className="flex w-screen h-screen">
-            <Image
-                alt="login image"
-                src={"/img/login.png"}
-                width={766}
-                height={902}
-                className="w-[50%] h-full object-cover hidden md:block"
-            />
-            <CardAuth
-                title="Ingresa a tu cuenta facilemente"
-                msgFacebook="Login with Facebook"
-                msgGoogle="Login with Google"
-            />
-
+        <main className="flex w-screen h-screen bg-white">
+            <SideImageAuth image="/img/login.png" alt="login image"/>
+            <LoginForm/>
         </main>
      );
 }

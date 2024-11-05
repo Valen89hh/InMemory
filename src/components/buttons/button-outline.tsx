@@ -11,7 +11,7 @@ const ButtonOutline: React.FC<ButtonOutlineProps> = ({
     children, 
     ...props
 }) => {
-    return ( <button className={twMerge("py-2 px-4 text-primary bg-transparent border-primary border-2", className)} {...props}>
+    return ( <button className={twMerge("py-2 px-4 hover:bg-slate-50 text-primary bg-transparent border-primary rounded-ms border-2", className)} {...props}>
         {children}
     </button> );    
 }
