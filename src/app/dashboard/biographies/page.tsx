@@ -1,29 +1,17 @@
 "use client"
 
-import { buyBiography } from "@/actions/payment";
 import ButtonPrimary from "@/components/buttons/button-primary";
-import Card from "@/components/cards/card";
-import Close from "@/components/icons/close";
 import EditIcon from "@/components/icons/edit-icon";
 import PayIcon from "@/components/icons/pay-icon";
 import PreviewIcon from "@/components/icons/preview-icon";
 import SearchIcon from "@/components/icons/search-icon";
 import ShareIcon from "@/components/icons/share-icon";
-import ErrorToast from "@/components/toast/error-toast";
-import { getBiographiesByName, getBiographiesByUser } from "@/lib/firebase";
 import { Biography } from "@/lib/models/biography-model";
-import { useAuthStore } from "@/lib/storage/auth-storage";
 import { useModalAddress } from "@/lib/storage/modal-address-storage";
 import { formatDataToString } from "@/utils/formater-date";
-import { CircularProgress } from "@mui/material";
-import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState, useTransition } from "react";
-import toast from "react-hot-toast";
-import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
+import { useCallback, useState } from "react";
 import { useMethodosPayment } from "@/lib/storage/methodos-payment-storage";
-import ButtonPayment from "@/components/buttons/button-payment";
 import Biographies from "@/features/biographies/components/biographies";
 
 
