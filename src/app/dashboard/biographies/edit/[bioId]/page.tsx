@@ -1,13 +1,8 @@
 "use client"
 
-import Card from "@/components/cards/card";
-import ErrorToast from "@/components/toast/error-toast";
-import { getBiographyById } from "@/lib/firebase";
 import { CircularProgress } from "@mui/material";
 import { useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
-import CreateBiographyPage from "../../create/page";
-import CreateBiography from "@/components/form/create-biography";
 import { BiographyForEdit } from "@/lib/supabase/models";
 import { getBiographyForEdit } from "@/features/biographies/actions";
 import EditBiography from "@/features/biographies/components/edit-biography";
