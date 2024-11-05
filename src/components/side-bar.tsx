@@ -11,7 +11,7 @@ import ContactIcon from "@/components/icons/contact-icon";
 import ButtonOutline from "@/components/buttons/button-outline";
 import ButtonPrimary from "@/components/buttons/button-primary";
 import { useSideBarStore } from "@/lib/storage/side-bar-storage";
-import { useAuthStore, useProfileState } from "@/lib/storage/auth-storage";
+import {  useProfileState } from "@/lib/storage/auth-storage";
 import Image from "next/image";
 import CardAnimation from "./animations/card-animation";
 import { LogOut, Newspaper, NotebookText, Settings, ShoppingBasket } from "lucide-react";
