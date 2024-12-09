@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Link from "next/link";
+import ChatWhatsapp from "@/components/widgets/chat-whatsapp";
 
 export default function Home() {
 
@@ -24,6 +25,7 @@ export default function Home() {
         <HowItWork/>
         <Banner/>
         <Testimonios/>
+        <ChatWhatsapp/>
     </>
   );
 }
