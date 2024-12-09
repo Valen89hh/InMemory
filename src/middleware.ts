@@ -2,9 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.searchParams.has('page') || request.nextUrl.searchParams.has('search') || request.nextUrl.searchParams.has('filter')) {
-    return NextResponse.next();
-  }
   // update user's auth session
   return await updateSession(request)
 }

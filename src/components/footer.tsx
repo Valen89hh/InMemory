@@ -53,13 +53,13 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col xs:flex-row gap-4 py-4 justify-between items-center border-t-2 border-solid border-white">
                     <div className="flex gap-3">
-                        <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://ohafd"}>
+                        <Link className="p-1 border-solid border-white border-2 rounded-full" target="_blank" href={"https://wa.me/51993672965?text=Hola,%20me%20gustaría%20obtener%20más%20información."}>
                             <Whatsapp width={20} height={20}/>
                         </Link>
-                        <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://www.facebook.com/share/rNUXp3qYhKKCPrXZ/?mibextid=qi2Omg"}>
+                        <Link className="p-1 border-solid border-white border-2 rounded-full" target="_blank" href={"https://www.facebook.com/profile.php?id=61564713278731"}>
                             <Facebook width={20} height={20}/>
                         </Link>
-                        <Link className="p-1 border-solid border-white border-2 rounded-full" href={"https://ohafd"}>
+                        <Link className="p-1 border-solid border-white border-2 rounded-full" target="_blank" href={"https://www.instagram.com/inmemory.pe/"}>
                             <Instagram width={20} height={20}/>
                         </Link>
                     </div>
