@@ -1,6 +1,5 @@
 "use client"
 
-import { getBiographyById } from "@/lib/firebase";
 import { Biography } from "@/lib/models/biography-model";
 import { CircularProgress } from "@mui/material";
 import { useEffect, useState, useTransition } from "react";
